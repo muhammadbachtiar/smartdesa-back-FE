@@ -4,6 +4,7 @@ import { setLoading } from '../../context/features/appSlice';
 import HandleRespondResponse from '../../services/utils/handleRespondResponse';
 import { deleteInfografis } from '../../api/infografisManagement';
 import { InfografisData } from '../../types/infografisManagement.type';
+import { clearInfografisManagementData } from '../../context/features/infografisManagementSlice';
 
 const useFetchInfografisDelete = (id: number | undefined, onSuccess?: () => void) => {
   const dispatch = useDispatch();
@@ -15,6 +16,7 @@ const useFetchInfografisDelete = (id: number | undefined, onSuccess?: () => void
       const response = await deleteInfografis(id)
       dispatch(setLoading(false));
       HandleRespondResponse<InfografisData>(response, 'deleted');
+      dispatch(clearInfografisManagementData())
       if (onSuccess) {
         onSuccess();
       }
