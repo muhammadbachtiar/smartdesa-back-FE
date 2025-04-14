@@ -37,7 +37,7 @@ const navItems: NavItem[] = [
   {
     icon: <ListIcon />,
     name: "Article Management",
-    subItems: [{ name: "Tour", path: "/tour-management", pro: false }, { name: "Article", path: "/article-management", pro: false }, { name: "Category", path: "/category-management", pro: false }],
+    subItems: [{ name: "Tour", path: "/tour", pro: false }, { name: "Article", path: "/article-management", pro: false }, { name: "Category", path: "/category-management", pro: false }],
   },
   {
     name: "Forms",

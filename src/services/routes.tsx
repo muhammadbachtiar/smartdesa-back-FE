@@ -19,6 +19,7 @@ import ArticleManagement from "../pages/ArtikelManagementPages/ArticleManagement
 import CreateArticle from "../pages/ArtikelManagementPages/ArticleCreate";
 import FormElements from "../pages/Forms/FormElements";
 import EditArticle from "../pages/ArtikelManagementPages/ArticleEdit";
+import TourPageIndex from "../pages/Tour";
 
 const Routers = () => {
   return (
@@ -44,6 +45,7 @@ const Routers = () => {
             <Route path="/article-management/create" element={<CreateArticle />} />
             <Route path="/article-management/:id" element={<EditArticle />} />
             <Route path="/form-elements" element={<FormElements />} />
+            <Route path="/tour" element={<TourPageIndex />} />
           </Route>
         </Route>
         <Route path="*" element={<NotFound />} />
