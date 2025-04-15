@@ -1,62 +1,53 @@
-import PageBreadcrumb from "../../components/common/PageBreadCrumb";
-import ComponentCard from "../../components/common/ComponentCard";
-import PageMeta from "../../components/common/PageMeta";
-import Pagination from "../../components/atoms/Pagination";
-import useFetchPermissionData from "../../hooks/userManagement/useFetchPermissions";
-import useFetchRolebyId from "../../hooks/userManagement/useFetchRolebyId";
-import useFetchRoleUpdate from "../../hooks/userManagement/useFetchRoleUpdate";
+import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
+import ComponentCard from "../../../components/common/ComponentCard";
+import PageMeta from "../../../components/common/PageMeta";
+import Pagination from "../../../components/atoms/Pagination";
+import useFetchPermissionData from "../../../hooks/userManagement/useFetchPermissions";
+import useFetchRoleCreate from "../../../hooks/userManagement/useFetchRoleCreate";
 import { useSelector } from "react-redux";
-import { StateContext } from "../../types/app.type";
-import { RoleData } from "../../types/userManagement.type";
-import { RoleForm } from "../../types/form.type";
-import { userManagementStateContext } from "../../types/app.type";
+import { StateContext } from "../../../types/app.type";
+import { userManagementStateContext } from "../../../types/app.type";
+import { RoleForm } from "../../../types/form.type";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-export default function EditRole() {
-  const { id } = useParams();
-  const roleData: RoleData | null = useFetchRolebyId(id);
-  const userManagementData: userManagementStateContext  = useSelector((state:StateContext) => state.userManagement);
+export default function CreateRole() {
+
   const { register, reset, setValue, handleSubmit, watch } = useForm<RoleForm>({
     defaultValues:{
       permissions: [],
       nama: ""
     },
   });
-  const [currentPage, setCurrentPage] = useState( userManagementData.permissionsDataMeta.current_page || 1);
+  const userManagementData: userManagementStateContext  = useSelector((state:StateContext) => state.userManagement);
+  const [currentPage, setCurrentPage] = useState(userManagementData.permissionsDataMeta.current_page || 1);
   const [formData, setFormData] = useState<RoleForm | null>(null);
-  useFetchPermissionData(currentPage);
-  useFetchRoleUpdate(formData, id);
   
-  const currentPermissions = watch("permissions");
+  useFetchPermissionData(currentPage);
+  useFetchRoleCreate(formData);
+  
   
   const onSubmit = (data: RoleForm) => {
     setFormData(data);
     reset(); 
   };
   
+  const currentPermissions = watch("permissions");
+
   const handleCheckboxChange = (id: number) => {
     const updatedPermissions = currentPermissions.includes(id)
-    ? currentPermissions.filter((permId) => permId !== id) 
-    : [...currentPermissions, id]; 
-    
+      ? currentPermissions.filter((permId) => permId !== id) 
+      : [...currentPermissions, id]; 
+
     setValue("permissions", updatedPermissions); 
   };
-
-  useEffect(() => {
-    if (roleData) {
-      setValue('permissions', roleData.permission ?? []);
-      setValue('nama', roleData.nama ?? '');
-    }
-  }, [roleData, setValue]);
   return (
     <>
       <PageMeta
         title="React.js Basic Tables Dashboard | TailAdmin - Next.js Admin Dashboard Template"
         description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
       />
-      <PageBreadcrumb pageTitle="Edit" additionalPaths={[{ name: "Roles", url: "/role-management" },]} />
+      <PageBreadcrumb pageTitle="Create" additionalPaths={[{ name: "Roles", url: "/role-management" },]} />
       <div className="space-y-6">
         <ComponentCard title="Roles">
           <div className="relative overflow-x-auto sm:rounded-lg">
@@ -67,7 +58,7 @@ export default function EditRole() {
               </div>
               <div className="grid grid-cols-12 md:grid-cols-8 gap-y-4">
                 <label htmlFor="nama" className="col-span-12 mb-2 text-sm font-medium text-gray-900 dark:text-white">Permission :</label>
-                {(userManagementData.permissionsData.pages[String(currentPage)] || []).map((permission) => (
+                {(userManagementData?.permissionsData?.pages?.[String(currentPage)] || []).map((permission) => (
                   <label
                     key={permission.id}
                     className="col-span-6 md:col-span-2 inline-flex items-center m-1 cursor-pointer"

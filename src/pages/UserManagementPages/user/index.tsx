@@ -1,34 +1,26 @@
-import PageBreadcrumb from "../../components/common/PageBreadCrumb";
-import ComponentCard from "../../components/common/ComponentCard";
-import PageMeta from "../../components/common/PageMeta";
-import SearchBar from "../../components/atoms/SearchBar";
-import Pagination from "../../components/atoms/Pagination";
-import useFetchRoleData from "../../hooks/userManagement/useFetchRoles";
-import useFetchRoleDelete from "../../hooks/userManagement/useFetchRoleDelete";
-import HandleDeleteData from "../../services/utils/handleDeleteData";
+import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
+import ComponentCard from "../../../components/common/ComponentCard";
+import PageMeta from "../../../components/common/PageMeta";
+import SearchBar from "../../../components/atoms/SearchBar";
+import Pagination from "../../../components/atoms/Pagination";
+import useFetchUserData from "../../../hooks/userManagement/useFetchUsers";
+import useFetchUserDelete from "../../../hooks/userManagement/useFetchUserDelete";
+import HandleDeleteData from "../../../services/utils/handleDeleteData";
 import { useSelector } from "react-redux";
-import { StateContext } from "../../types/app.type";
-import { userManagementStateContext } from "../../types/app.type";
-import { RoleData } from "../../types/userManagement.type";
+import { StateContext } from "../../../types/app.type";
+import { userManagementStateContext } from "../../../types/app.type";
+import { UserData } from "../../../types/userManagement.type";
 import { Link } from "react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-export default function RoleManagement() {
-  const userManagementData: userManagementStateContext  = useSelector((state:StateContext) => state.userManagement);
+export default function UserManagement() {
   const [searchValue, setSearchValue] = useState('');
-  const [currentPage, setCurrentPage] = useState(userManagementData.roleDataMeta.current_page || 1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [idToDetele, setIdToDelete] = useState<number>();
-  const ReloadData = () => {
-    useFetchRoleData(String(currentPage), searchValue); 
-  };
-  
-  useFetchRoleDelete(idToDetele,  ReloadData);
-  useFetchRoleData(String(currentPage), searchValue);
-
-  useEffect(()=>{
-    setCurrentPage(1)
-  },[searchValue])
-
+  useFetchUserData(String(currentPage), searchValue);
+  useFetchUserDelete(idToDetele);
+  const userManagementData: userManagementStateContext  = useSelector((state:StateContext) => state.userManagement);
+  console.log(userManagementData.userData)
   return (
     <>
       <PageMeta
@@ -44,7 +36,7 @@ export default function RoleManagement() {
                     <SearchBar searchValue={searchValue} setSearchValue={setSearchValue} />
                 </div>
                 <div className="content-center bg-white dark:bg-gray-900">
-                  <Link to={'/role-management/create'}  className="px-8 py-3 rounded-md text-white bg-green-600 hover:bg-green-700">
+                  <Link to={'/user-management/create'}  className="px-8 py-3 rounded-md text-white bg-green-600 hover:bg-green-700">
                     Create
                   </Link>
                 </div>
@@ -53,7 +45,10 @@ export default function RoleManagement() {
                   <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                       <tr>
                           <th scope="col" className="px-6 py-3">
-                              Role name
+                              Name
+                          </th>
+                          <th scope="col" className="px-6 py-3">
+                              Email
                           </th>
                           <th scope="col" className="px-6 py-3">
                               Action
@@ -61,20 +56,23 @@ export default function RoleManagement() {
                       </tr>
                   </thead>
                   <tbody>
-                    {(searchValue ? userManagementData.roleData.searchResults[searchValue]?.[currentPage] : userManagementData.roleData.pages[currentPage])?.map((item: RoleData ) => (
+                    {userManagementData.userData.map((item: UserData ) => (
                       <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {item.nama}
+                            {item.name}
                         </th>
                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          <Link to={`/role-management/${item.id}`} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</Link>   
-                          <span onClick={() => {HandleDeleteData(item.id, {name: item.nama, kind: "Role"}, setIdToDelete) }} className="font-medium text-red-600 dark:text-red-500 hover:underline ms-3">Delete</span>
+                            {item.email}
+                        </th>
+                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                          <Link to={`/user-management/${item.id}`} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</Link>   
+                          <span onClick={() => {HandleDeleteData(item.id, {name: item.name, kind: "User"}, setIdToDelete) }} className="font-medium text-red-600 dark:text-red-500 hover:underline ms-3">Delete</span>
                         </th>
                     </tr>
                     ))}
                   </tbody>
               </table>
-              <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} data={userManagementData.roleDataMeta}/>
+              <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} data={userManagementData.userDataMeta}/>
           </div>
         </ComponentCard>
       </div>

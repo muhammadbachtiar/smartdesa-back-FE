@@ -1,21 +1,21 @@
-import PageBreadcrumb from "../../components/common/PageBreadCrumb";
-import ComponentCard from "../../components/common/ComponentCard";
-import PageMeta from "../../components/common/PageMeta";
-import Pagination from "../../components/atoms/Pagination";
-import Label from "../../components/form/Label";
-import useFetchUserUpdate from "../../hooks/userManagement/useFetchUserUpdate";
-import { EyeIcon, EyeCloseIcon } from "../../icons";
+import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
+import ComponentCard from "../../../components/common/ComponentCard";
+import PageMeta from "../../../components/common/PageMeta";
+import Pagination from "../../../components/atoms/Pagination";
+import Label from "../../../components/form/Label";
+import useFetchUserUpdate from "../../../hooks/userManagement/useFetchUserUpdate";
+import { EyeIcon, EyeCloseIcon } from "../../../icons";
 import { useSelector } from "react-redux";
-import { StateContext } from "../../types/app.type";
-import { userManagementStateContext } from "../../types/app.type";
-import { UserForm } from "../../types/form.type";
+import { StateContext } from "../../../types/app.type";
+import { userManagementStateContext } from "../../../types/app.type";
+import { UserForm } from "../../../types/form.type";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
-import useFetchUserbyId from "../../hooks/userManagement/useFetchUserbyId";
+import useFetchUserbyId from "../../../hooks/userManagement/useFetchUserbyId";
 import { useParams } from "react-router";
-import { DetailUserData } from "../../types/userManagement.type";
-import useFetchRoleData from "../../hooks/userManagement/useFetchRoles";
-import ProfileUpload from "../../components/form/input/profileUpload";
+import { DetailUserData } from "../../../types/userManagement.type";
+import useFetchRoleData from "../../../hooks/userManagement/useFetchRoles";
+import ProfileUpload from "../../../components/form/input/profileUpload";
 
 export default function EditUser() {
 
