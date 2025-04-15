@@ -6,11 +6,11 @@ import { StateContext } from '../../types/app.type';
 import isEqual from 'lodash/isEqual';
 import HandleShowToast from '../../services/utils/handleShowToast';
 import { getCategories } from '../../api/articleManagement';
-import { setCategoryData, setCategoryDataMeta } from '../../context/features/articleManagementSlice';
+import { setCategoryData, setCategoryDataMeta } from '../../context/features/categoryManagementSlice';
 
 const useFetchCategoryData = (page:string, search?: string | undefined) => {
   const dispatch = useDispatch();
-  const categoryContext = useSelector((state : StateContext) => state.articleManagement);
+  const categoryContext = useSelector((state : StateContext) => state.categoryManagement);
 
   const fetchData = useCallback(async () => {
     try {
@@ -46,7 +46,7 @@ const useFetchCategoryData = (page:string, search?: string | undefined) => {
 
   useEffect(() => {
     fetchData();
-  },[page, search]);
+  },[page, search, fetchData]);
 };
 
 export default useFetchCategoryData;

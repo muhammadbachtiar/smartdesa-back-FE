@@ -5,25 +5,26 @@ import SearchBar from "../../components/atoms/SearchBar";
 import Pagination from "../../components/atoms/Pagination";
 import HandleDeleteData from "../../services/utils/handleDeleteData";
 import { useSelector } from "react-redux";
-import { articleManagementStateContext, StateContext } from "../../types/app.type";
+import { categoryManagementStateContext, StateContext } from "../../types/app.type";
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
-import { CategoryData } from "../../types/articleManagement.type";
 import useFetchCategoryDelete from "../../hooks/articleManagement/useFetchCategoryDelete";
 import useFetchCategoryData from "../../hooks/articleManagement/useFetchCategory";
+import { CategoryData } from "../../types/categoryManagement.type";
 
 export default function CategoryManagement() {
-  const articleManagementData: articleManagementStateContext  = useSelector((state:StateContext) => state.articleManagement);
+  const categoryManagementData: categoryManagementStateContext  = useSelector((state:StateContext) => state.categoryManagement);
+  console.log(categoryManagementData)
   const [searchValue, setSearchValue] = useState('');
-  const [currentPage, setCurrentPage] = useState(articleManagementData.categoryDataMeta.current_page || 1);
+  const [currentPage, setCurrentPage] = useState(categoryManagementData.categoryDataMeta.current_page || 1);
   const [idToDetele, setIdToDelete] = useState<number>();
   
   const CategoryadData = () => {
     useFetchCategoryData(String(currentPage), searchValue); 
   };
   
-  useFetchCategoryDelete(idToDetele,  CategoryadData);
   useFetchCategoryData(String(currentPage), searchValue);
+  useFetchCategoryDelete(idToDetele,  CategoryadData);
 
   useEffect(()=>{
     setCurrentPage(1)
@@ -64,7 +65,7 @@ export default function CategoryManagement() {
                       </tr>
                   </thead>
                   <tbody>
-                    {(searchValue ? articleManagementData.categoryData.searchResults[searchValue]?.[currentPage] : articleManagementData.categoryData.pages[currentPage])?.map((item: CategoryData ) => (
+                    {(searchValue ? categoryManagementData.categoryData.searchResults[searchValue]?.[currentPage] : categoryManagementData.categoryData.pages[currentPage])?.map((item: CategoryData ) => (
                       <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {item.name}
@@ -80,7 +81,7 @@ export default function CategoryManagement() {
                     ))}
                   </tbody>
               </table>
-              <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} data={articleManagementData.categoryDataMeta}/>
+              <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} data={categoryManagementData.categoryDataMeta}/>
           </div>
         </ComponentCard>
       </div>

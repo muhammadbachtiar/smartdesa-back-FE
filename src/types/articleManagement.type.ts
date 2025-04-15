@@ -1,10 +1,4 @@
-export type CategoryData =  {
-    id: number,
-    name: string,
-    description: string,
-    created_at: string,
-    updated_at: string
-}
+import { CategoryData } from "./categoryManagement.type";
 
 export type ArticleData = {
     id: number;

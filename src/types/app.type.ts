@@ -1,5 +1,6 @@
-import { ArticleData, CategoryData } from "./articleManagement.type";
+import { ArticleData } from "./articleManagement.type";
 import { UserStateContext } from "./auth.type";
+import { CategoryData } from "./categoryManagement.type";
 import { InfografisData } from "./infografisManagement.type";
 import { PermissionData } from "./userManagement.type";
 import { RoleData } from "./userManagement.type";
@@ -31,11 +32,6 @@ export type userManagementStateContext = {
 }
 
 export type articleManagementStateContext = {
-    categoryData: {
-        pages: { [key: string]: CategoryData[] },
-        searchResults: { [key: string]: { [key: string]: CategoryData[] } }
-    }; 
-    categoryDataMeta: MetaType;
     articleData:  {
         pages: { [key: string]: ArticleData[] },
         searchResults: { [key: string]: { [key: string]: ArticleData[] } }
@@ -43,6 +39,14 @@ export type articleManagementStateContext = {
     articleDataMeta: MetaType;
 }
 
+export type categoryManagementStateContext = {
+    categoryData: {
+        pages: { [key: string]: CategoryData[] },
+        searchResults: { [key: string]: { [key: string]: CategoryData[] } }
+    }; 
+    categoryDataMeta: MetaType;
+}
+  
 export type infografisManagementStateContext = {
     infografisData:  {
         pages: { [key: string]: InfografisData[] },
@@ -65,6 +69,7 @@ export type StateContext = {
     user: UserStateContext;
     userManagement: userManagementStateContext;
     articleManagement: articleManagementStateContext;
+    categoryManagement: categoryManagementStateContext;
     infografisManagement: infografisManagementStateContext;
     app: AppContext;
 }
