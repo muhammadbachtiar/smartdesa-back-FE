@@ -13,11 +13,12 @@ export type ArticleForm = {
     title: string;
     content: string;
     category_id: string; 
-    published_at: string | null;
+    published_at?: string | null;
     thumbnail: string | undefined; 
+    description: string
     meta: {
       key: string; 
-      value: string; 
+      value: string | string[]; 
     }[];
 };
 
