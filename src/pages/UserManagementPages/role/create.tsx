@@ -2,7 +2,7 @@ import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
 import ComponentCard from "../../../components/common/ComponentCard";
 import PageMeta from "../../../components/common/PageMeta";
 import Pagination from "../../../components/atoms/Pagination";
-import useFetchPermissionData from "../../../hooks/userManagement/useFetchPermissions";
+import useFetchPermissionData from "../../../hooks/userManagement/permission/useFetchPermissions";
 import useFetchRoleCreate from "../../../hooks/userManagement/useFetchRoleCreate";
 import { useSelector } from "react-redux";
 import { StateContext } from "../../../types/app.type";

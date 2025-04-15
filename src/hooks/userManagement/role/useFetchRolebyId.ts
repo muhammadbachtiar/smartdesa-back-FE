@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from "react-redux";
-import { getRolebyId } from '../../api/userManagement';
-import { RoleData } from '../../types/userManagement.type';
-import { setLoading } from '../../context/features/appSlice';
+import { getRolebyId } from '../../../api/userManagement';
+import { RoleData } from '../../../types/userManagement.type';
+import { setLoading } from '../../../context/features/appSlice';
 
 const useFetchRolebyId = (id:string | undefined) => {
   const dispatch = useDispatch();
   const [roleData, setRoleData] = useState<RoleData | null>(null);
   
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchRolebyId = async () => {
       try {
         dispatch(setLoading(true));
         const response = await getRolebyId(id) 
@@ -23,7 +23,8 @@ const useFetchRolebyId = (id:string | undefined) => {
       }
     };
 
-    fetchData();
+    fetchRolebyId();
+    console.log('isFetching')
   }, [dispatch, id]);
 
   return roleData;
