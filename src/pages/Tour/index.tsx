@@ -6,7 +6,6 @@ import Pagination from "../../components/atoms/Pagination";
 import { useEffect, useState } from "react";
 import useCategoryQuery from "../../hooks/tour/useTourQuery";
 import { Link } from "react-router";
-// import useDeleteTour from "../../hooks/tour/useDeleteTour";
 import { TourData } from "../../types/tourManagement.type";
 import useDeleteTour from "../../hooks/tour/useDeleteTour";
 
@@ -16,15 +15,7 @@ export default function TourPageIndex() {
   const { handleDelete } = useDeleteTour();
 
   const { data, isLoading, isError } = useCategoryQuery(currentPage, searchValue);
-  // const { mutate: deleteTour } = useDeleteTour();
-
-  // const handleDelete = (id: number, name: string) => {
-  //   const confirmDelete = confirm(`Are you sure you want to delete category "${name}"?`);
-  //   if (confirmDelete) {
-  //     deleteTour(id);
-  //   }
-  // };
-
+  
   useEffect(() => {
     setCurrentPage(1);
   }, [searchValue]);

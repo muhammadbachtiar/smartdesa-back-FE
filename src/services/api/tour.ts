@@ -18,6 +18,21 @@ export const fetchTourData = async (page: number, search: string = '') => {
   return response.data;
 };
 
+export const createTourData = async (data: TourData | null) => {
+  const response = await axios.post(`${BASE_API}/api/v1/tour`,
+    data,
+    {
+      timeout: 15000,
+      headers: {
+          'ngrok-skip-browser-warning': true,
+          'Authorization': `Bearer ${token}`
+      }
+    }
+  );
+  return response.data;
+};
+
+
 export const deleteTourData = async (id: number) => {
   const response = await axios.delete(`${BASE_API}/api/v1/tour/${id}`,
     {

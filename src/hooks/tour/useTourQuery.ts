@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchTourData } from '../../services/api/tour';
 
 const useTourQuery = (page: number, search: string) => {
-  return useQuery({
+  return useQuery({    
     queryKey: ['tours', page, search],
     queryFn: () => fetchTourData(page, search),
     refetchOnWindowFocus: true,
