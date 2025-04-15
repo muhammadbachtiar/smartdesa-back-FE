@@ -19,6 +19,9 @@ import ArticleManagement from "../pages/ArtikelManagementPages/ArticleManagement
 import CreateArticle from "../pages/ArtikelManagementPages/ArticleCreate";
 import FormElements from "../pages/Forms/FormElements";
 import EditArticle from "../pages/ArtikelManagementPages/ArticleEdit";
+import InfografisManagementIndex from "../pages/ArtikelManagementPages/infografis";
+import InfografisEdit from "../pages/ArtikelManagementPages/infografis/edit";
+import InfografisCreate from "../pages/ArtikelManagementPages/infografis/create";
 
 const Routers = () => {
   return (
@@ -44,6 +47,10 @@ const Routers = () => {
             <Route path="/article-management/create" element={<CreateArticle />} />
             <Route path="/article-management/:id" element={<EditArticle />} />
             <Route path="/form-elements" element={<FormElements />} />
+            {/* Info Grafis */}
+            <Route path="/infografis-management" element={< InfografisManagementIndex />}/>
+            <Route path="/infografis-management/:id" element={<InfografisEdit />} />
+            <Route path="/infografis-management/create" element={<InfografisCreate />} />
           </Route>
         </Route>
         <Route path="*" element={<NotFound />} />
