@@ -4,6 +4,7 @@ import { setLoading } from '../../context/features/appSlice';
 import HandleRespondResponse from '../../services/utils/handleRespondResponse';
 import { ArticleData } from '../../types/articleManagement.type';
 import { deleteArticle } from '../../api/articleManagement';
+import { clearArticleManagementData } from '../../context/features/articleManagementSlice';
 
 const useFetchArticleDelete = (id: number | undefined, onSuccess?: () => void) => {
   const dispatch = useDispatch();
@@ -15,6 +16,7 @@ const useFetchArticleDelete = (id: number | undefined, onSuccess?: () => void) =
       const response = await deleteArticle(id)
       dispatch(setLoading(false));
       HandleRespondResponse<ArticleData>(response, 'deleted');
+      dispatch(clearArticleManagementData());
       if (onSuccess) {
         onSuccess();
       }
