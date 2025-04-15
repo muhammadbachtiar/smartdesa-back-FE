@@ -12,9 +12,12 @@ import { useSelector } from "react-redux";
 import useFetchCategoryData from "../../hooks/articleManagement/useFetchCategory";
 import Select from "react-select";
 import { Editor } from '@tinymce/tinymce-react';
+import MetaInputs from "../../components/form/form-elements/MetaInputs";
+import { stripHtml } from 'string-strip-html';
+import PublishedAtInput from "../../components/form/form-elements/PublisAtInput";
+
 
 export default function CreateArticle() {
-
   const articleManagement: articleManagementStateContext  = useSelector((state:StateContext) => state.articleManagement);
   const [searchValue, setSearchValue] = useState('');
   const [categoryOptions, setCategoryOptions] = useState(
@@ -33,7 +36,7 @@ export default function CreateArticle() {
       meta: [
           {
               "key": "title",
-              "value": "test12345"
+              "value": ""
           },
           {
             "key": "description",
@@ -41,7 +44,7 @@ export default function CreateArticle() {
           },
           {
             "key": "keywords",
-            "value": ""
+            "value": ["keyowrds 1", " keywords 2"]
           }
       ]
     }
@@ -51,33 +54,23 @@ export default function CreateArticle() {
   const [formData, setFormData] = useState<ArticleForm | null>(null);
   const thumbnail = watch("thumbnail");
   const metaData = watch('meta');
+  const publishedAtData = watch('published_at');
   const title = watch('title');
   
   useFetchArticleCreate(formData);
   useFetchCategoryData(String(1), searchValue);
   
   const onSubmit = (data: ArticleForm) => {
+    const today = new Date().toISOString().split("T")[0];
+    if (data.published_at?.split("T")[0] === today) {
+      data = { ...data, published_at: undefined };
+    }
     setFormData(data);
     reset(); 
   };
 
   const handleImageUpload = (imageUrl: string | undefined) => {
     setValue('thumbnail', imageUrl);
-  };
-
-  const handleAddMeta = () => {
-    setValue('meta',[...metaData, { key: "", value: "" }]);
-  };
-
-  const handleMetaChange = (index:number, field: "key" | "value", value:string) => {
-    const updatedMeta = [...metaData];
-    updatedMeta[index][field] = value;
-    setValue('meta', updatedMeta);
-  };
-
-  const handleRemoveMeta = (index:number) => {
-    const updatedMeta = metaData.filter((_, i) => i !== index);
-    setValue('meta', updatedMeta);
   };
 
   useEffect(() => {
@@ -117,7 +110,6 @@ export default function CreateArticle() {
                 <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Title</label>
                 <input type="text"  {...register("title", { required: "Name required"})} className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Article title" required />
               </div>
-
               <div className="mb-5">
                 <label htmlFor="content" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Content</label>
                 <Editor
@@ -137,11 +129,10 @@ export default function CreateArticle() {
                     ai_request: (_request: unknown, respondWith: { string: (arg0: () => Promise<never>) => unknown; }) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
                   }}
                   initialValue="Wtrite down the article content ..."
-                  onEditorChange={(content) => setValue("content", content)}
+                  onEditorChange={(content) => {setValue("content", content); setValue("description", stripHtml(content).result)}}
                 />
                 <input type="hidden" {...register("content", { required: "Article content required" })} required/>
               </div>
-
               <div className="mb-5">
                 <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category</label>
                 <Select
@@ -156,45 +147,10 @@ export default function CreateArticle() {
                 <input type="hidden" {...register("category_id")} />
               </div>
               <div className="mb-5">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">SEO Metadata</label>
-                  <button
-                    type="button"
-                    onClick={handleAddMeta}
-                    className="mb-3 p-2 text-white bg-blue-600 rounded disabled:bg-blue-400 hover:bg-blue-700 disabled:cursor-not-allowed"
-                    disabled={metaData.length === 5}
-                  >
-                    Add Meta
-                  </button>
-                  {metaData.map((meta, index) => (
-                    <div key={index} className="flex items-center space-x-3 mb-3">
-                      <input
-                        type="text"
-                        placeholder="Key"
-                        value={meta.key}
-                        required
-                        disabled={index === 0}
-                        onChange={(e) => handleMetaChange(index, "key", e.target.value)}
-                        className="w-1/3 p-2 border rounded disabled:bg-gray-100 dark:bg-gray-700 dark:text-white"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Value"
-                        value={meta.value}
-                        required
-                        disabled={index === 0}
-                        onChange={(e) => handleMetaChange(index, "value", e.target.value)}
-                        className="w-2/3 p-2 border rounded disabled:bg-gray-100 dark:bg-gray-700 dark:text-white"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveMeta(index)}
-                        disabled={index === 0}
-                        className="p-2 text-white bg-red-600 rounded disabled:bg-red-400 disabled:cursor-not-allowed hover:bg-red-700"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  ))}
+                <PublishedAtInput publishedAtData={publishedAtData} setValue={(field, value) => setValue(field as keyof ArticleForm, value)}/>
+              </div>
+              <div className="mb-5">
+                <MetaInputs metaData={metaData} setValue={(field, value) => setValue(field as keyof ArticleForm, value)}/>
               </div>
               <div className="mt-6 justify-items-end text-center">
                 <button

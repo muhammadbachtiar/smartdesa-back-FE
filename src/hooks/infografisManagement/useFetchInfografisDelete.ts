@@ -2,21 +2,21 @@ import { useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '../../context/features/appSlice';
 import HandleRespondResponse from '../../services/utils/handleRespondResponse';
-import { ArticleData } from '../../types/articleManagement.type';
-import { deleteArticle } from '../../api/articleManagement';
-import { clearArticleManagementData } from '../../context/features/articleManagementSlice';
+import { deleteInfografis } from '../../api/infografisManagement';
+import { InfografisData } from '../../types/infografisManagement.type';
+import { clearInfografisManagementData } from '../../context/features/infografisManagementSlice';
 
-const useFetchArticleDelete = (id: number | undefined, onSuccess?: () => void) => {
+const useFetchInfografisDelete = (id: number | undefined, onSuccess?: () => void) => {
   const dispatch = useDispatch();
  
   const fetchData = useCallback(async () => {
     try {
       if (!id) return;
       dispatch(setLoading(true));
-      const response = await deleteArticle(id)
+      const response = await deleteInfografis(id)
       dispatch(setLoading(false));
-      HandleRespondResponse<ArticleData>(response, 'deleted');
-      dispatch(clearArticleManagementData());
+      HandleRespondResponse<InfografisData>(response, 'deleted');
+      dispatch(clearInfografisManagementData())
       if (onSuccess) {
         onSuccess();
       }
@@ -32,4 +32,4 @@ const useFetchArticleDelete = (id: number | undefined, onSuccess?: () => void) =
   },[id]);
 };
 
-export default useFetchArticleDelete;
+export default useFetchInfografisDelete;

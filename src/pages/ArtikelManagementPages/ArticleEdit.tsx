@@ -15,6 +15,9 @@ import useFetchArticleUpdate from "../../hooks/articleManagement/useFetchArticle
 import { useParams } from "react-router";
 import { ArticleData } from "../../types/articleManagement.type";
 import useFetchArticlebyId from "../../hooks/articleManagement/useFetchArticlebyId";
+import MetaInputs from "../../components/form/form-elements/MetaInputs";
+import { stripHtml } from 'string-strip-html';
+import PublishedAtInput from "../../components/form/form-elements/PublisAtInput";
 
 export default function EditArticle() {
 
@@ -28,19 +31,14 @@ export default function EditArticle() {
                                                             label: category.name,
                                                           })) || []
                                                         );
-  const { register, reset, handleSubmit, watch, setValue, getValues } = useForm<ArticleForm>({
+  const { register, handleSubmit, watch, setValue, getValues } = useForm<ArticleForm>({
     defaultValues:{
       title: '',
       thumbnail: '',
       content: "",
       category_id: '',
       published_at: new Date().toISOString(),
-      meta: [
-          {
-              "key": "title",
-              "value": "test12345"
-          }
-      ]
+      meta: []
     }
   });
 
@@ -48,33 +46,22 @@ export default function EditArticle() {
   const [formData, setFormData] = useState<ArticleForm | null>(null);
   const thumbnail = watch("thumbnail");
   const metaData = watch('meta');
+  const publishedAtData = watch('published_at');
   const title = watch('title');
   
   useFetchArticleUpdate(formData ,id);
   useFetchCategoryData(String(1), searchValue);
   
   const onSubmit = (data: ArticleForm) => {
+    const today = new Date().toISOString().split("T")[0];
+    if (data.published_at?.split("T")[0] === today) {
+      data = { ...data, published_at: undefined };
+    }
     setFormData(data);
-    reset(); 
   };
 
   const handleImageUpload = (imageUrl: string | undefined) => {
     setValue('thumbnail', imageUrl);
-  };
-
-  const handleAddMeta = () => {
-    setValue('meta',[...metaData, { key: "", value: "" }]);
-  };
-
-  const handleMetaChange = (index:number, field: "key" | "value", value:string) => {
-    const updatedMeta = [...metaData];
-    updatedMeta[index][field] = value;
-    setValue('meta', updatedMeta);
-  };
-
-  const handleRemoveMeta = (index:number) => {
-    const updatedMeta = metaData.filter((_, i) => i !== index);
-    setValue('meta', updatedMeta);
   };
 
   useEffect(() => {
@@ -102,20 +89,31 @@ export default function EditArticle() {
   }, [articleManagement.categoryData.pages, articleManagement.categoryData.searchResults, detailArticleData, detailArticleData?.category?.name, detailArticleData?.category_id, searchValue]);
   
   useEffect(() => {
+
     if (detailArticleData) {
       setValue('title', detailArticleData.title ?? '');
       setValue('content', detailArticleData.content ?? '');
       setValue('thumbnail', detailArticleData.thumbnail ?? '');
+      setValue('published_at', detailArticleData.published_at ?? '');
       setValue('category_id', detailArticleData.category_id ?? []);
-      setValue('meta', detailArticleData.meta ?? []);
+      if(detailArticleData.meta[0]["key"] !== "title"){
+        const updatedMeta = [{"key": "title", "value": title }, ...detailArticleData.meta ]
+        updatedMeta[0]["value"] = title;
+      setValue('meta', updatedMeta ?? []);
+      } else {
+        setValue('meta', detailArticleData.meta ?? []);
+      }
     }
   }, [detailArticleData, setValue]);
 
   useEffect(() => {
-    console.log(metaData)
-    const updatedMeta = [...metaData];
-    updatedMeta[0]["value"] = title;
-    setValue('meta', updatedMeta);
+    
+
+    if (metaData.length > 0) {
+      const updatedMeta = [...metaData];
+      updatedMeta[0]["value"] = title;
+      setValue('meta', updatedMeta);
+    }
   }, [title]);
 
   return (
@@ -154,7 +152,7 @@ export default function EditArticle() {
                     ai_request: (_request: unknown, respondWith: { string: (arg0: () => Promise<never>) => unknown; }) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
                   }}
                   initialValue={getValues("content")}
-                  onEditorChange={(content) => setValue("content", content)}
+                  onEditorChange={(content) => {setValue("content", content); setValue("description", stripHtml(content).result)}}
                 />
                 <input type="hidden" {...register("content", { required: "Article content required" })} required/>
               </div>
@@ -173,45 +171,10 @@ export default function EditArticle() {
                 <input type="hidden" {...register("category_id")} />
               </div>
               <div className="mb-5">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">SEO Metadata</label>
-                  <button
-                    type="button"
-                    onClick={handleAddMeta}
-                    className="mb-3 p-2 text-white bg-blue-600 rounded disabled:bg-blue-400 hover:bg-blue-700 disabled:cursor-not-allowed"
-                    disabled={metaData.length === 5}
-                  >
-                    Add Meta
-                  </button>
-                  {metaData.map((meta, index) => (
-                    <div key={index} className="flex items-center space-x-3 mb-3">
-                      <input
-                        type="text"
-                        placeholder="Key"
-                        value={meta.key}
-                        required
-                        disabled={index === 0}
-                        onChange={(e) => handleMetaChange(index, "key", e.target.value)}
-                        className="w-1/3 p-2 border rounded disabled:bg-gray-100 dark:bg-gray-700 dark:text-white"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Value"
-                        value={meta.value}
-                        required
-                        disabled={index === 0}
-                        onChange={(e) => handleMetaChange(index, "value", e.target.value)}
-                        className="w-2/3 p-2 border rounded disabled:bg-gray-100 dark:bg-gray-700 dark:text-white"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveMeta(index)}
-                        disabled={index === 0}
-                        className="p-2 text-white bg-red-600 rounded disabled:bg-red-400 disabled:cursor-not-allowed hover:bg-red-700"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  ))}
+                <PublishedAtInput publishedAtData={publishedAtData} setValue={(field, value) => setValue(field as keyof ArticleForm, value)}/>
+              </div>
+              <div className="mb-5">
+                <MetaInputs metaData={metaData} setValue={(field, value) => setValue(field as keyof ArticleForm, value)}/>
               </div>
               <div className="mt-6 justify-items-end text-center">
                 <button
