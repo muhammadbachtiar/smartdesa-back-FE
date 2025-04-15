@@ -46,7 +46,7 @@ const useFetchArticleData = (page:string, search?: string | undefined) => {
 
   useEffect(() => {
     fetchData();
-  },[page, search]);
+  },[page, search, fetchData]);
 };
 
 export default useFetchArticleData;
