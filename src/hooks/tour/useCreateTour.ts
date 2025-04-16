@@ -1,39 +1,33 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-// import Swal from 'sweetalert2';
-import { TourData } from '../../types/tourManagement.type';
+import { useNavigate } from 'react-router';
+import { TourForm } from '../../types/tour.type';
 import { createTourData } from '../../services/api/tour';
 
 const useCreateTour = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const mutation = useMutation({
-    mutationFn: (data: TourData) => createTourData(data),
+    mutationFn: (data: TourForm) => createTourData(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tours'] });
+      navigate('/tour'); // bisa ditambah toast/alert juga      
     },
     onError: (error) => {
-      alert("Failed to delete tour");
-      console.error("Delete error:", error);
-    }
+      // HandleRespondResponse<TourData>([],"error")
+      // alert('Gagal membuat kategori.');
+      console.error(error);
+    },
   });
 
-//   const handleDelete = async (id: number, name: string) => {
-//     const confirmDelete = await Swal.fire({
-//       title: `Are you sure you want to delete this?`,
-//       text: `Data to delete: ${name}`,
-//       icon: "warning",
-//       showCancelButton: true,
-//       confirmButtonColor: "#3085d6",
-//       cancelButtonColor: "#d33",
-//       confirmButtonText: "Yes, Delete",
-//       cancelButtonText: "Cancel",
-//     });
-//     if (confirmDelete) {
-//       mutation.mutate(id);
-//     }
-//   };
+  const handleSubmit = (formData: TourForm) => {
+    mutation.mutate(formData);
+  };
 
-//   return { handleDelete, ...mutation };
-// };
+  return {
+    isPending: mutation.isPending,
+    handleSubmit,
+  };
+};
 
 export default useCreateTour;

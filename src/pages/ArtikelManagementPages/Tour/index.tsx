@@ -1,20 +1,20 @@
-import PageBreadcrumb from "../../components/common/PageBreadCrumb";
-import ComponentCard from "../../components/common/ComponentCard";
-import PageMeta from "../../components/common/PageMeta";
-import SearchBar from "../../components/atoms/SearchBar";
-import Pagination from "../../components/atoms/Pagination";
+import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
+import ComponentCard from "../../../components/common/ComponentCard";
+import PageMeta from "../../../components/common/PageMeta";
+import SearchBar from "../../../components/atoms/SearchBar";
+import Pagination from "../../../components/atoms/Pagination";
 import { useEffect, useState } from "react";
-import useCategoryQuery from "../../hooks/tour/useTourQuery";
+import useTourQuery from "../../../hooks/tour/useTourQuery";
 import { Link } from "react-router";
-import { TourData } from "../../types/tourManagement.type";
-import useDeleteTour from "../../hooks/tour/useDeleteTour";
+import { TourData } from "../../../types/tourManagement.type";
+import useDeleteTour from "../../../hooks/tour/useDeleteTour";
 
 export default function TourPageIndex() {
   const [searchValue, setSearchValue] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const { handleDelete } = useDeleteTour();
-
-  const { data, isLoading, isError } = useCategoryQuery(currentPage, searchValue);
+  
+  const { data, isLoading, isError, refetch } = useTourQuery(currentPage, searchValue);
+  const { handleDelete } = useDeleteTour(refetch);
   
   useEffect(() => {
     setCurrentPage(1);

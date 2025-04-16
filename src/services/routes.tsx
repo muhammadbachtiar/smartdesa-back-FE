@@ -19,8 +19,8 @@ import ArticleManagement from "../pages/ArtikelManagementPages/ArticleManagement
 import CreateArticle from "../pages/ArtikelManagementPages/ArticleCreate";
 import FormElements from "../pages/Forms/FormElements";
 import EditArticle from "../pages/ArtikelManagementPages/ArticleEdit";
-import TourPageIndex from "../pages/Tour";
-import TourPageCreate from "../pages/Tour/Create";
+import TourPageIndex from "../pages/ArtikelManagementPages/Tour";
+import TourPageCreate from "../pages/ArtikelManagementPages/Tour/Create";
 import InfografisManagementIndex from "../pages/ArtikelManagementPages/infografis";
 import InfografisEdit from "../pages/ArtikelManagementPages/infografis/edit";
 import InfografisCreate from "../pages/ArtikelManagementPages/infografis/create";

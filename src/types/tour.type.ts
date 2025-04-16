@@ -1,3 +1,5 @@
+import { TourMeta } from "./tour-meta.type";
+
 export type TourForm = {
     title: string,
     description: string,
@@ -15,8 +17,5 @@ export type TourForm = {
     latitude: string,
     longitude: string,
     published_at: string | null,
-    meta: {
-        key: string; 
-        value: string; 
-    }[];
+    meta: TourMeta[];
 }
