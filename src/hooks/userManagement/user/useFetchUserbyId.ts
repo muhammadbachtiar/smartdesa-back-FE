@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from "react-redux";
-import { getRolebyId } from '../../../api/userManagement';
-import { RoleData } from '../../../types/userManagement.type';
+import { getUserbyId } from '../../../api/userManagement';
+import { DetailUserData } from '../../../types/userManagement.type';
 import { setLoading } from '../../../context/features/appSlice';
 
-const useFetchRolebyId = (id:string | undefined) => {
+const useFetchUserbyId = (id:string | undefined) => {
   const dispatch = useDispatch();
-  const [roleData, setRoleData] = useState<RoleData | null>(null);
+  const [userData, setUserData] = useState<DetailUserData | null>(null);
   
   useEffect(() => {
-    const fetchRolebyId = async () => {
+    const fetchUserbyId = async () => {
       try {
         dispatch(setLoading(true));
-        const response = await getRolebyId(id) 
+        const response = await getUserbyId(id); 
         if (response.status === 200) {
-          setRoleData(response.data.data);
+          setUserData(response.data.data);
         }
       } catch (error) {
         console.error(error);
@@ -23,10 +23,10 @@ const useFetchRolebyId = (id:string | undefined) => {
       }
     };
 
-    fetchRolebyId();
+    fetchUserbyId();
   }, [dispatch, id]);
 
-  return roleData;
+  return userData;
 };
 
-export default useFetchRolebyId;
+export default useFetchUserbyId;

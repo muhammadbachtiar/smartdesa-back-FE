@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { PermissionData, RoleData } from "../../types/userManagement.type";
+import { PermissionData, RoleData, UserData } from "../../types/userManagement.type";
 import { PayloadAction } from "@reduxjs/toolkit";
 
 const initialState  = {
@@ -7,7 +7,7 @@ const initialState  = {
   permissionsDataMeta: { next_page_url: '', prev_page_url: '', total: 0, per_page: 0, current_page: 0, last_page: 0 },
   roleData: { pages: {}, searchResults: {}},
   roleDataMeta: { next_page_url: '', prev_page_url: '', total: 0, per_page: 0, current_page: 0, last_page: 0 },
-  userData: [],
+  userData: { pages: {}, searchResults: {}},
   userDataMeta: { next_page_url: '', prev_page_url: '', total: 0, per_page: 0, current_page: 0, last_page: 0 }
 };
 
@@ -41,8 +41,18 @@ const userManagementSlice = createSlice({
         state.roleDataMeta = action.payload;
     },
 
-    setUserData: (state, action) => {
-      state.userData = action.payload;
+    setUserData: (state: { userData: { pages: { [key: string]:  UserData[]}; searchResults: {[key:string]: {[key:string]:  UserData[]}}}}, action: PayloadAction<{ page: string; data: UserData[]; search: string | undefined }>) => {
+      const { page, data, search } = action.payload;
+      console.log(page, data, search)
+
+      if (search) {
+        if (!state.userData.searchResults[search]) {
+          state.userData.searchResults[search] = {};
+        }
+        state.userData.searchResults[search][page] = data;
+      } else {
+        state.userData.pages[page] = data;
+      }
     },
 
     setUserDataMeta: (state, action) => {
@@ -54,6 +64,8 @@ const userManagementSlice = createSlice({
       state.permissionsDataMeta = { next_page_url: '', prev_page_url: '', total: 0, per_page: 0, current_page: 0, last_page: 0 };
       state.roleData = { pages: {}, searchResults: {}};
       state.roleDataMeta = { next_page_url: '', prev_page_url: '', total: 0, per_page: 0, current_page: 0, last_page: 0 };
+      state.userData = {pages: {}, searchResults: {}};
+      state.userDataMeta = { next_page_url: '', prev_page_url: '', total: 0, per_page: 0, current_page: 0, last_page: 0 };
     },
   },
 });

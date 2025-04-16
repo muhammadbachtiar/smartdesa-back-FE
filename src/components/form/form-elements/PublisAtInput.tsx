@@ -5,11 +5,11 @@ import moment from "moment";
 
 interface PublishedAtInputProps {
   publishedAtData: string | null | undefined,
-  setValue: (field: string, value: string) => void;
+  setValue: (field: string, value: string  | null | undefined) => void;
 }
 
 const PublishedAtInput: React.FC<PublishedAtInputProps> = ({ publishedAtData, setValue }) => {
-  const publishedAt = new Date(publishedAtData || "");
+const publishedAt = new Date(publishedAtData || new Date());
 
   return (
     <>
@@ -19,6 +19,7 @@ const PublishedAtInput: React.FC<PublishedAtInputProps> = ({ publishedAtData, se
             value={publishedAt}
             onChange={(selectedDates) => {
               if (selectedDates.length > 0) {
+                const today = new Date().toISOString().split("T")[0];
                 const selectedDate = moment(selectedDates[0]); 
                 const currentTime = moment(); 
                 const combinedDateTime = selectedDate
@@ -29,7 +30,11 @@ const PublishedAtInput: React.FC<PublishedAtInputProps> = ({ publishedAtData, se
                     millisecond: currentTime.millisecond(),
                     }) 
                     .toISOString();
-                setValue("published_at", combinedDateTime);
+                if (combinedDateTime.split("T")[0] === today) {
+                  setValue("published_at", undefined );
+                } else {
+                  setValue("published_at", combinedDateTime);
+                }
               }
             }}
             options={{

@@ -4,7 +4,7 @@ import PageMeta from "../../../components/common/PageMeta";
 import Pagination from "../../../components/atoms/Pagination";
 import useFetchPermissionData from "../../../hooks/userManagement/permission/useFetchPermissions";
 import useFetchRolebyId from "../../../hooks/userManagement/role/useFetchRolebyId";
-import useFetchRoleUpdate from "../../../hooks/userManagement/useFetchRoleUpdate";
+import useFetchRoleUpdate from "../../../hooks/userManagement/role/useFetchRoleUpdate";
 import { useSelector } from "react-redux";
 import { StateContext } from "../../../types/app.type";
 import { RoleData } from "../../../types/userManagement.type";

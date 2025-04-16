@@ -1,11 +1,7 @@
 import React from 'react';
 import { PlusIcon, TrashBinIcon } from '../../../icons';
 import CreatableSelect from 'react-select/creatable';
-
-interface Meta {
-    key: string;
-    value: string | string[];
-  }
+import { Meta } from '../../../types/app.type';
 
 interface MetaInputsProps {
   metaData: Meta[],
