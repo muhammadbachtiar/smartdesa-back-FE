@@ -8,6 +8,7 @@ import useTourQuery from "../../../hooks/tour/useTourQuery";
 import { Link } from "react-router";
 import { TourData } from "../../../types/tourManagement.type";
 import useDeleteTour from "../../../hooks/tour/useDeleteTour";
+import HandleShowToast from "../../../services/utils/handleShowToast";
 
 export default function TourPageIndex() {
   const [searchValue, setSearchValue] = useState('');
@@ -20,17 +21,17 @@ export default function TourPageIndex() {
     setCurrentPage(1);
   }, [searchValue]);
 
-  if (isLoading) return <p className="text-center">Loading...</p>;
-  if (isError) return <p className="text-center text-red-500">Failed to load category data</p>;
+  if (isLoading) return HandleShowToast('info','Please wait, Fetching data...')
+  if (isError) return HandleShowToast('warning','Failed to load category data')
 
-  const toursData = data?.data || [];
+  const toursData = data?.data.data || [];
   const meta = {
-    current_page: data?.current_page || 1,
-    total: data?.total || 0,
-    per_page: data?.per_page || 10,
-    last_page: data?.last_page || 1,
-    next_page_url: data?.next_page_url || null,
-    prev_page_url: data?.prev_page_url || null
+    current_page: data?.data.meta.current_page || 1,
+    total: data?.data.meta.total || 0,
+    per_page: data?.data.meta.per_page || 10,
+    last_page: data?.data.meta.last_page || 1,
+    next_page_url: data?.data.meta.next_page_url || null,
+    prev_page_url: data?.data.meta.prev_page_url || null
   };
 
   return (
@@ -38,7 +39,7 @@ export default function TourPageIndex() {
       <PageMeta title="Tour Page" description="Manage tour here" />
       <PageBreadcrumb pageTitle="Tour" />
       <div className="space-y-6">
-        <ComponentCard title="Tour">
+        <ComponentCard title="Tours List">
           <div className="relative overflow-x-auto sm:rounded-lg">
             <div className="flex flex-col md:flex-row justify-between py-4">
               <div className="pb-4 content-center bg-white dark:bg-gray-900">
