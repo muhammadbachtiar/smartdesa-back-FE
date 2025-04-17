@@ -24,6 +24,7 @@ import TourPageCreate from "../pages/ArtikelManagementPages/Tour/Create";
 import InfografisManagementIndex from "../pages/ArtikelManagementPages/infografis";
 import InfografisEdit from "../pages/ArtikelManagementPages/infografis/edit";
 import InfografisCreate from "../pages/ArtikelManagementPages/infografis/create";
+import TourPageUpdate from "../pages/ArtikelManagementPages/Tour/Update";
 
 const Routers = () => {
   return (
@@ -51,6 +52,7 @@ const Routers = () => {
             <Route path="/form-elements" element={<FormElements />} />
             <Route path="/tour" element={<TourPageIndex />} />
             <Route path="/tour/create" element={<TourPageCreate />} />
+            <Route path="/tour/edit/:id" element={<TourPageUpdate />} />
             {/* Info Grafis */}
             <Route path="/infografis-management" element={< InfografisManagementIndex />}/>
             <Route path="/infografis-management/:id" element={<InfografisEdit />} />
