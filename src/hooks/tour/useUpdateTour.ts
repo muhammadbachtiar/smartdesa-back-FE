@@ -1,11 +1,17 @@
-import { useQuery } from '@tanstack/react-query';
-import { fetchTourDataById } from '../../services/api/tour';
+import { updateTourData } from '../../services/api/tour';
+import { TourForm } from '../../types/tour.type';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router';
 
-const useTourQueryById = (id: string | undefined) => {
-  return useQuery({    
-    queryKey: ['tours', id],
-    queryFn: () => fetchTourDataById(id),
+export default function useUpdateTour(id: string | undefined) {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: (data: TourForm) => updateTourData(data, id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tours'] });
+      navigate('/tour');
+    }
   });
-};
-
-export default useTourQueryById;
+}

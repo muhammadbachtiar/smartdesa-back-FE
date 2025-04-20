@@ -10,7 +10,7 @@ import { TourData } from "../../../types/tourManagement.type";
 import HandleShowToast from "../../../services/utils/handleShowToast";
 import useDeleteBulkTour from "../../../hooks/tour/useDeleteBulkTour";
 
-export default function TourPageIndex() {
+export default function TourPage() {
   const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -105,7 +105,7 @@ export default function TourPageIndex() {
             <table className="w-full text-sm mb-4 text-left text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                  <th className="w-[1%] py-3">
+                  <th className="w-[1%] py-3 px-6">
                     <div className="flex items-center justify-center">
                       <input
                         className="w-5 h-5 appearance cursor-pointer dark:border-gray-700 border border-gray-300 checked:border-transparent rounded-md checked:bg-brand-500 disabled:opacity-60"

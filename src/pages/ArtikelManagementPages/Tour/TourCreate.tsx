@@ -4,16 +4,13 @@ import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
 import PageMeta from "../../../components/common/PageMeta";
 import { TourForm } from "../../../types/tour.type";
 import ThumbnailArticleUpload from "../../../components/form/input/thumbnailArticleUpload";
-// import Label from '../../../components/form/Label';
-// import Flatpickr from "react-flatpickr";
-// import { CalenderIcon } from '../../../icons';
 import useCreateTour from "../../../hooks/tour/useCreateTour";
 import MetaInputs from "../../../components/form/form-elements/MetaInputs";
 import { useEffect } from "react";
 import PublishedAtInput from "../../../components/form/form-elements/PublisAtInput";
 
-export default function TourPageCreate() {
-  const { register, watch, setValue, handleSubmit } = useForm<TourForm>({
+export default function TourCreate() {
+  const { register, watch, setValue, handleSubmit, formState: { errors} } = useForm<TourForm>({
     defaultValues: {
       title: "",
       description: "",
@@ -152,12 +149,21 @@ export default function TourPageCreate() {
                     Email
                   </label>
                   <input
-                    type="text"
-                    {...register("link.email", { required: "email required" })}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Email"
-                    required
-                  />
+                      type="text"
+                      {...register("link.email", {
+                        required: "email required",
+                        pattern: {
+                          value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                          message: "Format email tidak valid",
+                        },
+                      })}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Email"
+                      required
+                    />
+                    {errors?.link?.email && (
+                      <p className="text-red-500 text-sm mt-1">{errors.link.email.message}</p>
+                    )}
                 </div>
                 <div className="mb-5">
                   <label
@@ -167,14 +173,21 @@ export default function TourPageCreate() {
                     Website
                   </label>
                   <input
-                    type="text"
-                    {...register("link.website", {
-                      required: "website required",
-                    })}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Website"
-                    required
-                  />
+                      type="text"
+                      {...register("link.website", {
+                        required: "website required",
+                        pattern: {
+                          value: /^(?!:\/\/)([a-zA-Z0-9-_]+\.)+[a-zA-Z]{2,}$/,
+                          message: "Format URL tidak valid",
+                        },
+                      })}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Website"
+                      required
+                    />
+                    {errors?.link?.website && (
+                      <p className="text-red-500 text-sm mt-1">{errors.link.website.message}</p>
+                    )}
                 </div>
                 <div className="mb-5">
                   <label

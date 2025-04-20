@@ -87,6 +87,32 @@ export const createTourData = async (data: TourForm | null) => {
   }
 };
 
+export const updateTourData = async (data: TourForm, id:string | undefined): Promise<ResponseCreateDataType<{data: TourData}, {data: {message: string; data: string[];}}>> => {
+  console.log('ini id nya', id)
+  console.log('ini datanya nya', data)
+  try {
+    const response: ResponseCreateDataType<
+      { data: TourData },
+      { data: { message: string; data: string[] } }
+    > = await axios.put(`${BASE_API}/api/v1/tour/${id}`, data, {
+      timeout: 15000,
+      headers: {
+        "ngrok-skip-browser-warning": true,
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    HandleRespondResponse<TourData>(response, "created");
+    return response;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      HandleRespondError(error);
+    } else {
+      console.error("Unexpected error type:", error);
+    }
+    throw error;
+  }
+};
+
 export const deleteTourData = async (id: number) => {
   try {
     const response: ResponseCreateDataType<

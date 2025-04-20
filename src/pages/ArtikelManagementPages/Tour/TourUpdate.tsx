@@ -7,39 +7,39 @@ import ThumbnailArticleUpload from "../../../components/form/input/thumbnailArti
 import MetaInputs from "../../../components/form/form-elements/MetaInputs";
 import { useEffect } from "react";
 import PublishedAtInput from "../../../components/form/form-elements/PublisAtInput";
-import useTourQueryById from "../../../hooks/tour/useUpdateTour";
 import { useParams } from "react-router";
 import HandleShowToast from "../../../services/utils/handleShowToast";
 import { TourData } from "../../../types/tourManagement.type";
+import useTourById from "../../../hooks/tour/useTourById";
+import useUpdateTour from "../../../hooks/tour/useUpdateTour";
 
-export default function TourPageUpdate() {
+export default function TourUpdate() {
   const { id } = useParams();
-  const { data, isLoading, isError, error } = useTourQueryById(id);
+  const { data, isLoading, isError } = useTourById(id);
+  const { mutate, isPending } = useUpdateTour(id);
 
   const {
     register,
     handleSubmit,
     setValue,
     watch,
-    formState: { errors },
   } = useForm<TourData>();
 
   const title = watch("title");
-  const publishedAtData = watch("published_at");
+  const publishedAtData = watch("published_at") || new Date().toISOString();
   const thumbnail = watch("thumbnail");
   const metaData = watch("meta");
-  const linkData = watch("link.sosmed");
+  const linkData = watch("link.sosmed") || [];
   const metaTitle = watch("title");
 
-  // Prefill form saat data sudah didapat
-  useEffect(() => {
+  useEffect(() => {    
     if (metaData?.length && metaData[0].value !== metaTitle) {
       const updateMeta = [...metaData];
       updateMeta[0].value = metaTitle;
       setValue("meta", updateMeta);
     }
   }, [setValue, metaData, metaTitle]);
-  
+
   useEffect(() => {    
     if (data?.data) {
       const tour = data.data;
@@ -50,17 +50,29 @@ export default function TourPageUpdate() {
       setValue("link.email", tour.link.email);
       setValue("link.website", tour.link.website);
       setValue("link.gmap", tour.link.gmap);
-      setValue("published_at", tour.published_at);      
-      setValue("meta",tour.meta ?? [...metaData]);     
-      
-      // tambahkan setValue untuk field lainnya
+      setValue("latitude", tour.latitude);
+      setValue("longitude", tour.longitude);
+      setValue("published_at", tour.published_at);
+      setValue("meta", tour.meta);
+      if(tour.link.sosmed.length === 0){
+        setValue('link.sosmed',[])
+      }else{
+        setValue('link.sosmed', tour.link.sosmed ?? [])
+      }
     }
   }, [data, setValue, title]);
+
+
+  if (isPending){
+    HandleShowToast("info", "Update data...");
+    return null;
+  }
 
   if (!id) {
     HandleShowToast("info", "ID tidak ditemukan");
     return null;
   }
+
   if (isLoading){
     HandleShowToast("info", "Please wait, fetching data...");
     return null;
@@ -72,8 +84,8 @@ export default function TourPageUpdate() {
   }
 
   const onSubmit = (formData: TourData) => {
-    console.log('Form submitted:', formData);
-    // TODO: panggil mutation edit di sini
+    // console.log('Form submitted:', formData);
+    mutate(formData);
   };
 
   const handleImageUpload = (imageUrl: string | undefined) => {
@@ -244,7 +256,7 @@ export default function TourPageUpdate() {
                 </div>
                 <div className="mb-5">
                   <PublishedAtInput
-                    publishedAtData={publishedAtData}
+                    publishedAtData={publishedAtData}                    
                     setValue={(field, value) =>
                       setValue(field as keyof TourForm, value)
                     }
@@ -264,7 +276,7 @@ export default function TourPageUpdate() {
           </ComponentCard>
         </div>
         <div className="space-y-6">
-          {/* <ComponentCard title="Link and Sociamedia">
+          <ComponentCard title="Link and Sociamedia">
             <div className="mb-5">
               <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 Add sociamedia link
@@ -273,7 +285,9 @@ export default function TourPageUpdate() {
                 type="button"
                 onClick={handleAddLink}
                 className="mb-3 p-2 text-white bg-blue-600 rounded disabled:bg-blue-400 hover:bg-blue-700 disabled:cursor-not-allowed"
-                disabled={linkData.length === 5}
+                disabled={                  
+                  linkData.length === 5
+                }
               >
                 Add link
               </button>
@@ -309,12 +323,12 @@ export default function TourPageUpdate() {
                 </div>
               ))}
             </div>
-          </ComponentCard> */}
+          </ComponentCard>
 
           <ComponentCard title="Meta">
             <div className="mb-5">
               <MetaInputs
-                metaData={metaData}
+                metaData={metaData ?? []}
                 setValue={(field, value) =>
                   setValue(field as keyof TourForm, value)
                 }

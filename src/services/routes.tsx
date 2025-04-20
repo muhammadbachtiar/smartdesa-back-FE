@@ -19,12 +19,12 @@ import ArticleManagement from "../pages/ArtikelManagementPages/ArticleManagement
 import CreateArticle from "../pages/ArtikelManagementPages/ArticleCreate";
 import FormElements from "../pages/Forms/FormElements";
 import EditArticle from "../pages/ArtikelManagementPages/ArticleEdit";
-import TourPageIndex from "../pages/ArtikelManagementPages/Tour";
-import TourPageCreate from "../pages/ArtikelManagementPages/Tour/Create";
+import TourPage from "../pages/ArtikelManagementPages/Tour/TourPage";
+import TourCreate from "../pages/ArtikelManagementPages/Tour/TourCreate";
 import InfografisManagementIndex from "../pages/ArtikelManagementPages/infografis";
 import InfografisEdit from "../pages/ArtikelManagementPages/infografis/edit";
 import InfografisCreate from "../pages/ArtikelManagementPages/infografis/create";
-import TourPageUpdate from "../pages/ArtikelManagementPages/Tour/Update";
+import TourUpdate from "../pages/ArtikelManagementPages/Tour/TourUpdate";
 
 const Routers = () => {
   return (
@@ -50,9 +50,9 @@ const Routers = () => {
             <Route path="/article-management/create" element={<CreateArticle />} />
             <Route path="/article-management/:id" element={<EditArticle />} />
             <Route path="/form-elements" element={<FormElements />} />
-            <Route path="/tour" element={<TourPageIndex />} />
-            <Route path="/tour/create" element={<TourPageCreate />} />
-            <Route path="/tour/edit/:id" element={<TourPageUpdate />} />
+            <Route path="/tour" element={<TourPage />} />
+            <Route path="/tour/create" element={<TourCreate />} />
+            <Route path="/tour/edit/:id" element={<TourUpdate />} />
             {/* Info Grafis */}
             <Route path="/infografis-management" element={< InfografisManagementIndex />}/>
             <Route path="/infografis-management/:id" element={<InfografisEdit />} />
