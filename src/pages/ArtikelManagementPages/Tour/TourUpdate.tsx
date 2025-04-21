@@ -25,7 +25,7 @@ export default function TourUpdate() {
     watch,
   } = useForm<TourData>();
 
-  const title = watch("title");
+  // const title = watch("title");
   const publishedAtData = watch("published_at") || new Date().toISOString();
   const thumbnail = watch("thumbnail");
   const metaData = watch("meta");
@@ -60,7 +60,7 @@ export default function TourUpdate() {
         setValue('link.sosmed', tour.link.sosmed ?? [])
       }
     }
-  }, [data, setValue, title]);
+  }, [data, setValue]);
 
 
   if (isPending){
@@ -118,7 +118,7 @@ export default function TourUpdate() {
         description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
       />
       <PageBreadcrumb
-        pageTitle="Create"
+        pageTitle="Update"
         additionalPaths={[{ name: "Tours", url: "/tour" }]}
       />
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
