@@ -17,6 +17,7 @@ export const fetchTourData = async (
   limit: number | 10,
   search: string = ""
 ): Promise<ResponseType<{ data: TourData[]; meta: MetaType }>> => {
+  console.log('ini page limit nya', limit)
   try {
     const response: ResponseType<{ data: TourData[]; meta: MetaType }> =
       await axios.get(

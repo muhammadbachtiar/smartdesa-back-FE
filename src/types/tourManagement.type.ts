@@ -18,6 +18,6 @@ export type TourData = {
     thumbnail: string | undefined,
     latitude: string,
     longitude: string,
-    published_at: string | null,
+    published_at: string | null | undefined,
     meta: TourMeta[];
 }

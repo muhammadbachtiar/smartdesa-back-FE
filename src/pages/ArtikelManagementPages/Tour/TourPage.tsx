@@ -13,28 +13,31 @@ import useDeleteBulkTour from "../../../hooks/tour/useDeleteBulkTour";
 export default function TourPage() {
   const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isSelectedRow, setIsSelectedRow] = useState(false);
+  const [pageLimit, setPageLimit] = useState(10);
 
   const { data, isLoading, isError, refetch } = useTourQuery(
     currentPage,
+    pageLimit,
     searchValue
   );
   const { handleDeleteBulkTour } = useDeleteBulkTour(refetch);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
   useEffect(() => {
+    setPageLimit(pageLimit);
     setCurrentPage(1);
-  }, [searchValue, selectedIds]);
+  }, [searchValue, selectedIds, pageLimit]);
 
-  if (isLoading){
+  if (isLoading) {
     HandleShowToast("info", "Please wait, Fetching data...");
     return null;
   }
-    
-  if (isError){
+
+  if (isError) {
     HandleShowToast("warning", "Failed to load category data");
     return null;
   }
-    
 
   const toursData = data?.data.data || [];
   const meta = {
@@ -49,6 +52,8 @@ export default function TourPage() {
   const handleSelectRow = (id: number) => {
     let updatedIds: number[];
 
+    setIsSelectedRow(true);
+
     if (selectedIds.includes(id)) {
       updatedIds = selectedIds.filter((itemId) => itemId !== id);
     } else {
@@ -60,6 +65,8 @@ export default function TourPage() {
 
   const handleSelectAll = () => {
     const allIds = toursData.map((item) => item.id);
+
+    setIsSelectedRow(false);
 
     if (selectedIds.length === toursData.length) {
       setSelectedIds([]);
@@ -76,7 +83,7 @@ export default function TourPage() {
         <ComponentCard title="Tours List">
           <div className="relative overflow-x-auto sm:rounded-lg">
             <div className="flex flex-col md:flex-row justify-between py-4">
-              <div className="pb-4 content-center bg-white dark:bg-gray-900">
+              <div className="flex item-center gap-3 mt-1">
                 <SearchBar
                   searchValue={searchValue}
                   setSearchValue={setSearchValue}
@@ -103,26 +110,40 @@ export default function TourPage() {
             </div>
 
             <table className="w-full text-sm mb-4 text-left text-gray-500 dark:text-gray-400">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <thead className="border-b border-gray-100 dark:border-white/[0.05]">
                 <tr>
                   <th className="w-[1%] py-3 px-6">
                     <div className="flex items-center justify-center">
                       <input
-                        className="w-5 h-5 appearance cursor-pointer dark:border-gray-700 border border-gray-300 checked:border-transparent rounded-md checked:bg-brand-500 disabled:opacity-60"
+                        className="w-5 h-5 appearance-none cursor-pointer dark:border-gray-700 border border-gray-300 checked:border-transparent rounded-md checked:bg-brand-500 disabled:opacity-60"
                         type="checkbox"
                         checked={
-                          toursData.length > 0 &&
-                          selectedIds.length === toursData.length
+                          selectedIds.length > 0 &&
+                          selectedIds.length === selectedIds.length &&
+                          !isSelectedRow
                         }
                         onChange={handleSelectAll}
                       />
+                      {selectedIds.length > 0 && !isSelectedRow && (
+                        <svg
+                          className="absolute w-3 h-3 text-white pointer-events-none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      )}
                     </div>
                   </th>
                   <th className="px-6 py-6">Title</th>
                   <th className="px-6 py-3">Description</th>
                   <th className="px-6 py-3">Address</th>
-                  <th className="px-6 py-3">Latitude</th>
-                  <th className="px-6 py-3">Longitude</th>
+                  <th className="px-6 py-3">GMap</th>
                   <th className="px-6 py-3">Action</th>
                 </tr>
               </thead>
@@ -132,14 +153,36 @@ export default function TourPage() {
                     key={item.id}
                     className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                   >
-                    <td className="px-6 py-4">
+                    {/* <td className="px-6 py-4">
                       <input
                         className="w-5 h-5 appearance-none cursor-pointer dark:border-gray-700 border border-gray-300 checked:border-transparent rounded-md checked:bg-brand-500 disabled:opacity-60"
                         type="checkbox"
                         checked={selectedIds.includes(item.id)}
                         onChange={() => handleSelectRow(item.id)}
                       />
-                    </td>
+                    </td> */}
+                    <div className="relative flex items-center justify-center py-6">
+                      <input
+                        className="w-5 h-5 appearance-none cursor-pointer dark:border-gray-700 border border-gray-300 checked:border-transparent rounded-md checked:bg-brand-500 disabled:opacity-60"
+                        type="checkbox"
+                        checked={selectedIds.includes(item.id)}
+                        onChange={() => handleSelectRow(item.id)}
+                      />
+                      {selectedIds.includes(item.id) && (
+                        <svg
+                          className="absolute w-3 h-3 text-white pointer-events-none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      )}
+                    </div>
                     <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
                       {item.title}
                     </td>
@@ -152,10 +195,7 @@ export default function TourPage() {
                       {item.address.length > 200 ? "..." : ""}
                     </td>
                     <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                      {item.latitude}
-                    </td>
-                    <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                      {item.longitude}
+                      {item.link.gmap}
                     </td>
                     <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                       <Link
@@ -173,6 +213,8 @@ export default function TourPage() {
             <Pagination
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
+              pageLimit={pageLimit}
+              setPageLimit={setPageLimit}
               data={meta}
             />
           </div>

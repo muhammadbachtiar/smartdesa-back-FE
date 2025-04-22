@@ -18,12 +18,7 @@ export default function TourUpdate() {
   const { data, isLoading, isError } = useTourById(id);
   const { mutate, isPending } = useUpdateTour(id);
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-  } = useForm<TourData>();
+  const { register, handleSubmit, setValue, watch } = useForm<TourData>();
 
   // const title = watch("title");
   const publishedAtData = watch("published_at") || new Date().toISOString();
@@ -32,7 +27,7 @@ export default function TourUpdate() {
   const linkData = watch("link.sosmed") || [];
   const metaTitle = watch("title");
 
-  useEffect(() => {    
+  useEffect(() => {
     if (metaData?.length && metaData[0].value !== metaTitle) {
       const updateMeta = [...metaData];
       updateMeta[0].value = metaTitle;
@@ -40,7 +35,7 @@ export default function TourUpdate() {
     }
   }, [setValue, metaData, metaTitle]);
 
-  useEffect(() => {    
+  useEffect(() => {
     if (data?.data) {
       const tour = data.data;
       setValue("thumbnail", tour.thumbnail);
@@ -54,16 +49,15 @@ export default function TourUpdate() {
       setValue("longitude", tour.longitude);
       setValue("published_at", tour.published_at);
       setValue("meta", tour.meta);
-      if(tour.link.sosmed.length === 0){
-        setValue('link.sosmed',[])
-      }else{
-        setValue('link.sosmed', tour.link.sosmed ?? [])
+      if (tour.link.sosmed.length === 0) {
+        setValue("link.sosmed", []);
+      } else {
+        setValue("link.sosmed", tour.link.sosmed ?? []);
       }
     }
   }, [data, setValue]);
 
-
-  if (isPending){
+  if (isPending) {
     HandleShowToast("info", "Update data...");
     return null;
   }
@@ -73,18 +67,22 @@ export default function TourUpdate() {
     return null;
   }
 
-  if (isLoading){
+  if (isLoading) {
     HandleShowToast("info", "Please wait, fetching data...");
     return null;
   }
-    
-  if (isError){
+
+  if (isError) {
     HandleShowToast("error", "Error: ${(error as Error).message}");
     return null;
   }
 
   const onSubmit = (formData: TourData) => {
     // console.log('Form submitted:', formData);
+    const today = new Date().toISOString().split("T")[0];
+    if (formData.published_at?.split("T")[0] === today) {
+      formData = { ...formData, published_at: undefined };
+    }
     mutate(formData);
   };
 
@@ -256,7 +254,7 @@ export default function TourUpdate() {
                 </div>
                 <div className="mb-5">
                   <PublishedAtInput
-                    publishedAtData={publishedAtData}                    
+                    publishedAtData={publishedAtData}
                     setValue={(field, value) =>
                       setValue(field as keyof TourForm, value)
                     }
@@ -285,24 +283,31 @@ export default function TourUpdate() {
                 type="button"
                 onClick={handleAddLink}
                 className="mb-3 p-2 text-white bg-blue-600 rounded disabled:bg-blue-400 hover:bg-blue-700 disabled:cursor-not-allowed"
-                disabled={                  
-                  linkData.length === 5
-                }
+                disabled={linkData.length === 6}
               >
                 Add link
               </button>
               {linkData.map((link, index) => (
                 <div key={index} className="flex items-center space-x-3 mb-3">
-                  <input
-                    type="text"
-                    placeholder="Socialmedia"
+                  <select
                     value={link.key}
                     required
                     onChange={(e) =>
                       handleChangeLink(index, "key", e.target.value)
                     }
                     className="w-1/3 p-2 border rounded disabled:bg-gray-100 dark:bg-gray-700 dark:text-white"
-                  />
+                  >
+                    <option value="" disabled>
+                      Pilih Social Media
+                    </option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="TikTok">TikTok</option>
+                    <option value="Threads">Threads</option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="LinkedIn">LinkedIn</option>
+                    <option value="YouTube">YouTube</option>
+                    <option value="X">X</option>
+                  </select>
                   <input
                     type="text"
                     placeholder="Link"

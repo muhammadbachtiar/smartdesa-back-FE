@@ -10,7 +10,13 @@ import { useEffect } from "react";
 import PublishedAtInput from "../../../components/form/form-elements/PublisAtInput";
 
 export default function TourCreate() {
-  const { register, watch, setValue, handleSubmit, formState: { errors} } = useForm<TourForm>({
+  const {
+    register,
+    watch,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<TourForm>({
     defaultValues: {
       title: "",
       description: "",
@@ -43,6 +49,10 @@ export default function TourCreate() {
   const { handleSubmit: submitTour, isPending } = useCreateTour();
 
   const onSubmit = (data: TourForm) => {
+    const today = new Date().toISOString().split("T")[0];
+    if (data.published_at?.split("T")[0] === today) {
+      data = { ...data, published_at: undefined };
+    }
     submitTour(data);
   };
 
@@ -149,21 +159,23 @@ export default function TourCreate() {
                     Email
                   </label>
                   <input
-                      type="text"
-                      {...register("link.email", {
-                        required: "email required",
-                        pattern: {
-                          value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                          message: "Format email tidak valid",
-                        },
-                      })}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="Email"
-                      required
-                    />
-                    {errors?.link?.email && (
-                      <p className="text-red-500 text-sm mt-1">{errors.link.email.message}</p>
-                    )}
+                    type="text"
+                    {...register("link.email", {
+                      required: "email required",
+                      pattern: {
+                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                        message: "Format email tidak valid",
+                      },
+                    })}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Email"
+                    required
+                  />
+                  {errors?.link?.email && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.link.email.message}
+                    </p>
+                  )}
                 </div>
                 <div className="mb-5">
                   <label
@@ -173,21 +185,23 @@ export default function TourCreate() {
                     Website
                   </label>
                   <input
-                      type="text"
-                      {...register("link.website", {
-                        required: "website required",
-                        pattern: {
-                          value: /^(?!:\/\/)([a-zA-Z0-9-_]+\.)+[a-zA-Z]{2,}$/,
-                          message: "Format URL tidak valid",
-                        },
-                      })}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="Website"
-                      required
-                    />
-                    {errors?.link?.website && (
-                      <p className="text-red-500 text-sm mt-1">{errors.link.website.message}</p>
-                    )}
+                    type="text"
+                    {...register("link.website", {
+                      required: "website required",
+                      pattern: {
+                        value: /^(?!:\/\/)([a-zA-Z0-9-_]+\.)+[a-zA-Z]{2,}$/,
+                        message: "Format URL tidak valid",
+                      },
+                    })}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Website"
+                    required
+                  />
+                  {errors?.link?.website && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.link.website.message}
+                    </p>
+                  )}
                 </div>
                 <div className="mb-5">
                   <label
@@ -267,22 +281,31 @@ export default function TourCreate() {
                 type="button"
                 onClick={handleAddLink}
                 className="mb-3 p-2 text-white bg-blue-600 rounded disabled:bg-blue-400 hover:bg-blue-700 disabled:cursor-not-allowed"
-                disabled={linkData.length === 5}
+                disabled={linkData.length === 6}
               >
                 Add link
               </button>
               {linkData.map((link, index) => (
                 <div key={index} className="flex items-center space-x-3 mb-3">
-                  <input
-                    type="text"
-                    placeholder="Socialmedia"
+                  <select
                     value={link.key}
                     required
                     onChange={(e) =>
                       handleChangeLink(index, "key", e.target.value)
                     }
                     className="w-1/3 p-2 border rounded disabled:bg-gray-100 dark:bg-gray-700 dark:text-white"
-                  />
+                  >
+                    <option value="" disabled>
+                      Pilih Social Media
+                    </option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="TikTok">TikTok</option>
+                    <option value="Threads">Threads</option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="LinkedIn">LinkedIn</option>
+                    <option value="YouTube">YouTube</option>
+                    <option value="X">X</option>
+                  </select>
                   <input
                     type="text"
                     placeholder="Link"

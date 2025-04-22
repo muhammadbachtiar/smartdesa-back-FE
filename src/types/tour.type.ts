@@ -16,6 +16,6 @@ export type TourForm = {
     thumbnail: string | undefined,
     latitude: string,
     longitude: string,
-    published_at: string | null,
+    published_at: string | null | undefined,
     meta: TourMeta[];
 }
