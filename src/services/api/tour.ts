@@ -14,6 +14,7 @@ const token = localStorage.getItem("token");
 
 export const fetchTourData = async (
   page: number,
+  limit: number | 10,
   search: string = ""
 ): Promise<ResponseType<{ data: TourData[]; meta: MetaType }>> => {
   try {
@@ -21,7 +22,7 @@ export const fetchTourData = async (
       await axios.get(
         `${BASE_API}/api/v1/tour?search=${
           search || ""
-        }&page=${page}&page_size=10`,
+        }&page=${page}&page_size=${limit}`,
         {
           timeout: 15000,
           headers: {
