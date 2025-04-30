@@ -27,7 +27,10 @@ export type userManagementStateContext = {
         searchResults: { [key: string]: { [key: string]: RoleData[] } }
     };
     roleDataMeta: MetaType;
-    userData: UserData[];
+    userData: {
+        pages: { [key: string]: UserData[] },
+        searchResults: { [key: string]: { [key: string]: UserData[] } }
+    };
     userDataMeta: MetaType;
 }
 
@@ -72,4 +75,9 @@ export type StateContext = {
     categoryManagement: categoryManagementStateContext;
     infografisManagement: infografisManagementStateContext;
     app: AppContext;
+}
+
+export interface Meta {
+    key: string;
+    value: string | string[];
 }

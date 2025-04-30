@@ -6,9 +6,8 @@ const HandleRespondResponse = <T>(
     response: ResponseCreateDataType<{data:T}, {data: {message: string, data: string[]}}>,
     action: string,
   ) => {
-    console.log('response setelah createee=================>',response)
-      if (String(response.status).startsWith('2')) { 
-        Swal.fire(`${action}!`, `Your data has been ${action}.`, "success");
+    if (String(response.status).startsWith('2')) { 
+      Swal.fire(`${action}!`, `Your data has been ${action}.`, "success");
       } else {
           const errorMessage = [
             response.response?.data?.message,

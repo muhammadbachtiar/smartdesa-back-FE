@@ -4,7 +4,8 @@ import { ResponseType } from "../types/response.type";
 import { MetaType } from "../types/app.type";
 import { ResponseCreateDataType } from "../types/response.type";
 import HandleRespondError from "../services/utils/handleRespondError";
-import { ArticleData, CategoryData } from "../types/articleManagement.type";
+import { ArticleData } from "../types/articleManagement.type";
+import { CategoryData } from "../types/categoryManagement.type";
 
 const BASE_API = import.meta.env.VITE_API_AUTH_URL
 const token = localStorage.getItem('token');
