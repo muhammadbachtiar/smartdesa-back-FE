@@ -18,10 +18,13 @@ import EditCategory from "../pages/ArtikelManagementPages/category/edit";
 import ArticleManagement from "../pages/ArtikelManagementPages/article";
 import CreateArticle from "../pages/ArtikelManagementPages/article/create";
 import FormElements from "../pages/Forms/FormElements";
+import TourPage from "../pages/ArtikelManagementPages/Tour/TourPage";
+import TourCreate from "../pages/ArtikelManagementPages/Tour/TourCreate";
 import EditArticle from "../pages/ArtikelManagementPages/article/edit";
 import InfografisManagementIndex from "../pages/ArtikelManagementPages/infografis";
 import InfografisEdit from "../pages/ArtikelManagementPages/infografis/edit";
 import InfografisCreate from "../pages/ArtikelManagementPages/infografis/create";
+import TourUpdate from "../pages/ArtikelManagementPages/Tour/TourUpdate";
 
 const Routers = () => {
   return (
@@ -47,6 +50,9 @@ const Routers = () => {
             <Route path="/article-management/create" element={<CreateArticle />} />
             <Route path="/article-management/:id" element={<EditArticle />} />
             <Route path="/form-elements" element={<FormElements />} />
+            <Route path="/tour" element={<TourPage />} />
+            <Route path="/tour/create" element={<TourCreate />} />
+            <Route path="/tour/edit/:id" element={<TourUpdate />} />
             {/* Info Grafis */}
             <Route path="/infografis-management" element={< InfografisManagementIndex />}/>
             <Route path="/infografis-management/:id" element={<InfografisEdit />} />
