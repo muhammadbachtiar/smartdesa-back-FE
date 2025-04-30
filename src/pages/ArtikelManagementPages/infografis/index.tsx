@@ -6,11 +6,11 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { infografisManagementStateContext, StateContext } from "../../../types/app.type";
-import useFetchInfografisData from "../../../hooks/infografisManagement/useFetchInfografis";
+import useFetchInfografisData from "../../../hooks/articleManagement/infografis/useFetchInfografis";
 import HandleDeleteData from "../../../services/utils/handleDeleteData";
 import { InfografisData } from "../../../types/infografisManagement.type";
 import Pagination from "../../../components/atoms/Pagination";
-import useFetchInfografisDelete from "../../../hooks/infografisManagement/useFetchInfografisDelete";
+import useFetchInfografisDelete from "../../../hooks/articleManagement/infografis/useFetchInfografisDelete";
 
 export default function InfografisIndex() {
   const infografisManagementData: infografisManagementStateContext = useSelector(
@@ -79,7 +79,7 @@ export default function InfografisIndex() {
                     <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {item.title}
                     </td>
-                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <td className="px-6 py-4 font-light text-gray-900 dark:text-white line-clamp-2">
                       {item.description}
                     </td>
                     <td>
